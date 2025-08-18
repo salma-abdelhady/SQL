@@ -1,0 +1,7 @@
+SELECT p.page_id
+FROM pages as p 
+LEFT JOIN page_likes as pl 
+USING(page_id)
+GROUP BY(page_id)
+HAVING COUNT(pl.page_id) = 0
+ORDER BY p.page_id;
