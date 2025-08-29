@@ -1,0 +1,5 @@
+SELECT e.user_id
+FROM emails AS e
+JOIN texts AS t 
+USING(email_id)
+WHERE EXTRACT(DAY FROM (t.action_date - e.signup_date)) = 1;
