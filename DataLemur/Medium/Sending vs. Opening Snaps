@@ -1,0 +1,15 @@
+SELECT 
+    a.age_bucket, 
+    ROUND(100.0*
+        SUM(CASE WHEN act.activity_type = 'send' THEN act.time_spent ELSE 0 END) 
+        / SUM(act.time_spent), 2
+    ) AS send_perc,
+    ROUND(100.0*
+        SUM(CASE WHEN act.activity_type = 'open' THEN act.time_spent ELSE 0 END) 
+        / SUM(act.time_spent) , 2
+    ) AS open_perc
+FROM activities AS act
+INNER JOIN age_breakdown AS a
+    ON a.user_id = act.user_id
+WHERE act.activity_type IN ('open', 'send')
+GROUP BY a.age_bucket;
