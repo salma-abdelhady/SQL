@@ -1,0 +1,7 @@
+SELECT 
+  c.customer_id
+FROM customer_contracts AS c 
+JOIN products AS p 
+USING(product_id)
+GROUP BY c.customer_id
+HAVING COUNT(DISTINCT p.product_category) = 3
