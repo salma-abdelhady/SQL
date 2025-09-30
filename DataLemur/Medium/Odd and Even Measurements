@@ -1,0 +1,26 @@
+/* 
+ Error
+ Runtime parameter *postgres* was provided is not supported for question (question_id: 7))
+
+ this kept showing I don't where is the problem...
+*/
+
+
+
+WITH cte AS(
+  SELECT
+    CAST(measurement_time AS DATE) AS measurement_day,
+    measurement_value,
+    ROW_NUMBER() OVER(PARTITION BY CAST(measurement_time AS DATE)
+    ORDER BY measurement_time) AS ordered
+  FROM measurements
+)
+
+SELECT 
+  measurement_day,
+  SUM(CASE WHEN ordered % 2 = 1 THEN +measurement_value ELSE 0 END) AS odd_sum,
+  SUM(CASE WHEN ordered % 2 = 0 THEN +measurement_value ELSE 0 END) AS even_sum
+FROM cte 
+GROUP BY measurement_day
+  
+  
