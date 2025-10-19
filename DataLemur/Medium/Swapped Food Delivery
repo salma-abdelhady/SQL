@@ -1,0 +1,17 @@
+WITH cte AS (
+  SELECT 
+    order_id,
+    item,
+    ROW_NUMBER() OVER (ORDER BY order_id) AS rn
+  FROM orders
+)
+SELECT
+  order_id AS corrected_order_id,
+  COALESCE(
+    CASE
+      WHEN rn % 2 = 1 THEN LEAD(item) OVER (ORDER BY rn)
+      WHEN rn % 2 = 0 THEN LAG(item) OVER (ORDER BY rn)
+    END,
+    item
+  ) AS swapped
+FROM cte;
